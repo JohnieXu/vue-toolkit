@@ -17,6 +17,16 @@ pnpm install
 pnpm build
 ```
 
+## 弹窗示例 Demo
+
+本地运行 vue-modal-utils 验证示例：
+
+```bash
+pnpm demo
+```
+
+启动后访问浏览器即可体验 showCommonBottomPopup、showModal、showBottomTip 等 API 的完整演示。
+
 ## 本地调试接入
 
 在主项目（如 trainResource-b2c）中接入本地 vue-toolkit 进行联调：
