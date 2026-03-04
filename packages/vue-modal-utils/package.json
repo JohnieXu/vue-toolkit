@@ -1,0 +1,34 @@
+{
+  "name": "vue-modal-utils",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Vue 3 弹窗命令式调用 API，基于 Vant",
+  "main": "dist/vue-modal-utils.umd.cjs",
+  "module": "dist/vue-modal-utils.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-modal-utils.mjs",
+      "require": "./dist/vue-modal-utils.umd.cjs"
+    },
+    "./style": "./dist/vue-modal-utils.css"
+  },
+  "files": ["dist"],
+  "peerDependencies": {
+    "vue": "^3.5.0",
+    "vant": "^4.9.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "sass": "^1.42.1",
+    "unplugin-vue-components": "^28.7.0",
+    "vant": "^4.9.19",
+    "vite": "^6.3.5",
+    "vue": "^3.5.13"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "keywords": ["vue", "vue3", "modal", "vant", "command", "imperative"],
+  "license": "MIT"
+}

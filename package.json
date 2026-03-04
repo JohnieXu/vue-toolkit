@@ -1,0 +1,16 @@
+{
+  "name": "vue-toolkit",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "基于 Vue 3 的 UI 工具方法集合",
+  "scripts": {
+    "build": "pnpm -r run build",
+    "docs:dev": "pnpm --filter docs-site dev",
+    "docs:build": "pnpm --filter docs-site build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.0.0"
+}
