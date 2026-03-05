@@ -1,0 +1,28 @@
+{
+  "name": "vue-shared-utils",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Vue 3 共享工具方法，供 vue-toolkit 各子包复用",
+  "main": "dist/vue-shared-utils.umd.cjs",
+  "module": "dist/vue-shared-utils.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-shared-utils.mjs",
+      "require": "./dist/vue-shared-utils.umd.cjs"
+    }
+  },
+  "files": ["dist"],
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5",
+    "vue": "^3.5.13"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "keywords": ["vue", "vue3", "utils", "shared"],
+  "license": "MIT"
+}

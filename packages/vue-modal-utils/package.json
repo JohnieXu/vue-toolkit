@@ -17,6 +17,9 @@
     "vue": "^3.5.0",
     "vant": "^4.9.0"
   },
+  "dependencies": {
+    "vue-shared-utils": "workspace:*"
+  },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
     "sass": "^1.42.1",

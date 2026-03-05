@@ -2,7 +2,8 @@
  * vue-modal-utils
  * 弹窗命令式调用 API：showCommonBottomPopup、showModal、showBottomTip
  */
-import { createApp, h, ref } from 'vue'
+import { h, ref } from 'vue'
+import { mountComponent } from 'vue-shared-utils'
 import BottomPopup from './components/BottomPopup.vue'
 import ModalRenderer from './ModalRenderer.vue'
 
@@ -19,43 +20,35 @@ const ANIMATION_DURATION = 300
  */
 export function showCommonBottomPopup(options = {}) {
   return new Promise((resolve) => {
-    const container = document.createElement('div')
-    document.body.appendChild(container)
+    const closeRef = { fn: null }
 
-    const show = ref(true)
-    const handleConfirm = () => {
-      show.value = false
-      setTimeout(() => {
-        app.unmount()
-        container.remove()
-        resolve()
-      }, ANIMATION_DURATION)
-    }
-
-    const app = createApp({
-      setup() {
-        return () =>
-          h(BottomPopup, {
-            show: show.value,
-            'onUpdate:show': (v) => {
-              show.value = v
-              if (!v) {
-                setTimeout(() => {
-                  app.unmount()
-                  container.remove()
-                  resolve()
-                }, ANIMATION_DURATION)
-              }
-            },
-            title: options.title ?? '提示',
-            message: options.message ?? '',
-            buttonText: options.buttonText ?? '知道了',
-            showClose: options.showClose ?? true,
-            onConfirm: handleConfirm,
-          })
+    const { unmount } = mountComponent(
+      {
+        setup() {
+          const show = ref(true)
+          const handleConfirm = () => {
+            show.value = false
+            closeRef.fn?.()
+          }
+          return () =>
+            h(BottomPopup, {
+              show: show.value,
+              'onUpdate:show': (v) => {
+                show.value = v
+                if (!v) closeRef.fn?.()
+              },
+              title: options.title ?? '提示',
+              message: options.message ?? '',
+              buttonText: options.buttonText ?? '知道了',
+              showClose: options.showClose ?? true,
+              onConfirm: handleConfirm,
+            })
+        },
       },
-    })
-    app.mount(container)
+      { unmountDelay: ANIMATION_DURATION }
+    )
+
+    closeRef.fn = () => unmount(() => resolve())
   })
 }
 
@@ -83,8 +76,7 @@ export const showBottomTip = showCommonBottomPopup
  */
 export function showModal(options = {}) {
   return new Promise((resolve, reject) => {
-    const container = document.createElement('div')
-    document.body.appendChild(container)
+    const closeRef = { fn: null }
 
     const show = ref(true)
     let resolved = false
@@ -93,11 +85,7 @@ export function showModal(options = {}) {
       resolved = true
       show.value = false
       options.onClose?.()
-      setTimeout(() => {
-        app.unmount()
-        container.remove()
-        resolve(action)
-      }, ANIMATION_DURATION)
+      closeRef.fn?.(action)
     }
 
     const handleAction = async (action) => {
@@ -115,29 +103,33 @@ export function showModal(options = {}) {
 
     options.onOpen?.()
 
-    const app = createApp({
-      setup() {
-        return () =>
-          h(ModalRenderer, {
-            show: show.value,
-            'onUpdate:show': (v) => {
-              show.value = v
-            },
-            onAction: handleAction,
-            position: options.position ?? 'bottom',
-            title: options.title ?? '提示',
-            message: options.message ?? '',
-            confirmText: options.confirmText ?? '确认',
-            cancelText: options.cancelText ?? '取消',
-            showCancelButton: options.showCancelButton ?? false,
-            showClose: options.showClose ?? true,
-            content: options.content ?? null,
-            component: options.component ?? null,
-            componentProps: options.componentProps ?? {},
-            buttons: options.buttons ?? null,
-          })
+    const { unmount } = mountComponent(
+      {
+        setup() {
+          return () =>
+            h(ModalRenderer, {
+              show: show.value,
+              'onUpdate:show': (v) => {
+                show.value = v
+              },
+              onAction: handleAction,
+              position: options.position ?? 'bottom',
+              title: options.title ?? '提示',
+              message: options.message ?? '',
+              confirmText: options.confirmText ?? '确认',
+              cancelText: options.cancelText ?? '取消',
+              showCancelButton: options.showCancelButton ?? false,
+              showClose: options.showClose ?? true,
+              content: options.content ?? null,
+              component: options.component ?? null,
+              componentProps: options.componentProps ?? {},
+              buttons: options.buttons ?? null,
+            })
+        },
       },
-    })
-    app.mount(container)
+      { unmountDelay: ANIMATION_DURATION }
+    )
+
+    closeRef.fn = (action) => unmount(() => resolve(action))
   })
 }
