@@ -14,5 +14,15 @@ pnpm add vue-modal-utils vue vant
 
 ```js
 import 'vue-modal-utils/style'
-import { showCommonBottomPopup, showModal, showBottomTip } from 'vue-modal-utils'
+import {
+  configureModalUtils,
+  showCommonBottomPopup,
+  showModal,
+  showBottomTip,
+} from 'vue-modal-utils'
+
+configureModalUtils({
+  // 可选：全局动画时长，支持 number(ms) 或 "0.3s"/"300ms"
+  animationDuration: '0.3s',
+})
 ```

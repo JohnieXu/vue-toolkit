@@ -7,7 +7,70 @@ import { mountComponent } from 'vue-shared-utils'
 import BottomPopup from './components/BottomPopup.vue'
 import ModalRenderer from './ModalRenderer.vue'
 
-const ANIMATION_DURATION = 300
+const DEFAULT_ANIMATION_DURATION = 300
+const VANT_ANIMATION_DURATION_VARS = ['--van-duration-base', '--van-animation-duration-base']
+
+const modalConfig = {
+  animationDuration: undefined,
+}
+
+function parseAnimationDuration(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return Math.max(0, Math.round(value))
+  }
+
+  if (typeof value !== 'string') return null
+
+  const normalized = value.trim().split(',')[0]?.trim()
+  if (!normalized) return null
+
+  const msMatch = normalized.match(/^(-?\d+(?:\.\d+)?)ms$/i)
+  if (msMatch) return Math.max(0, Math.round(Number(msMatch[1])))
+
+  const sMatch = normalized.match(/^(-?\d+(?:\.\d+)?)s$/i)
+  if (sMatch) return Math.max(0, Math.round(Number(sMatch[1]) * 1000))
+
+  const rawNumber = Number(normalized)
+  return Number.isFinite(rawNumber) ? Math.max(0, Math.round(rawNumber)) : null
+}
+
+function readVantAnimationDurationFromCssVar() {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return null
+
+  const styles = window.getComputedStyle(document.documentElement)
+  for (const cssVarName of VANT_ANIMATION_DURATION_VARS) {
+    const cssVarValue = styles.getPropertyValue(cssVarName)
+    const parsed = parseAnimationDuration(cssVarValue)
+    if (parsed !== null) return parsed
+  }
+
+  return null
+}
+
+function resolveAnimationDuration(options = {}) {
+  const fromCall = parseAnimationDuration(options.animationDuration)
+  if (fromCall !== null) return fromCall
+
+  const fromGlobalConfig = parseAnimationDuration(modalConfig.animationDuration)
+  if (fromGlobalConfig !== null) return fromGlobalConfig
+
+  const fromVantCssVar = readVantAnimationDurationFromCssVar()
+  if (fromVantCssVar !== null) return fromVantCssVar
+
+  return DEFAULT_ANIMATION_DURATION
+}
+
+/**
+ * 配置 vue-modal-utils 的全局行为
+ * @param {Object} [config]
+ * @param {number|string} [config.animationDuration] - 动画时长，支持数字（ms）或 "0.3s"/"300ms"
+ */
+export function configureModalUtils(config = {}) {
+  if (!config || typeof config !== 'object') return
+  if ('animationDuration' in config) {
+    modalConfig.animationDuration = config.animationDuration
+  }
+}
 
 /**
  * Phase 1: 单按钮底部弹窗
@@ -16,11 +79,13 @@ const ANIMATION_DURATION = 300
  * @param {string} options.message
  * @param {string} [options.buttonText='知道了']
  * @param {boolean} [options.showClose=true]
+ * @param {number|string} [options.animationDuration] - 单次调用动画时长，支持数字（ms）或 "0.3s"/"300ms"
  * @returns {Promise<void>}
  */
 export function showCommonBottomPopup(options = {}) {
   return new Promise((resolve) => {
     const closeRef = { fn: null }
+    const unmountDelay = resolveAnimationDuration(options)
 
     const { unmount } = mountComponent(
       {
@@ -45,7 +110,7 @@ export function showCommonBottomPopup(options = {}) {
             })
         },
       },
-      { unmountDelay: ANIMATION_DURATION }
+      { unmountDelay }
     )
 
     closeRef.fn = () => unmount(() => resolve())
@@ -72,11 +137,13 @@ export const showBottomTip = showCommonBottomPopup
  * @param {Function} [options.onOpen]
  * @param {Function} [options.onClose]
  * @param {Function} [options.beforeClose] - async, 返回 false 可阻止关闭
+ * @param {number|string} [options.animationDuration] - 单次调用动画时长，支持数字（ms）或 "0.3s"/"300ms"
  * @returns {Promise<'confirm'|'cancel'|'overlay'|'close'|string>}
  */
 export function showModal(options = {}) {
   return new Promise((resolve, reject) => {
     const closeRef = { fn: null }
+    const unmountDelay = resolveAnimationDuration(options)
 
     const show = ref(true)
     let resolved = false
@@ -127,7 +194,7 @@ export function showModal(options = {}) {
             })
         },
       },
-      { unmountDelay: ANIMATION_DURATION }
+      { unmountDelay }
     )
 
     closeRef.fn = (action) => unmount(() => resolve(action))

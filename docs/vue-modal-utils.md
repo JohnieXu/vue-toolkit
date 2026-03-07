@@ -17,6 +17,17 @@ import 'vant/lib/index.css'
 import 'vue-modal-utils/style'
 ```
 
+可选：初始化全局配置（例如动画时长）：
+
+```js
+import { configureModalUtils } from 'vue-modal-utils'
+
+configureModalUtils({
+  // 支持 number(ms) 或 string("0.3s"/"300ms")
+  animationDuration: '0.28s',
+})
+```
+
 ## API
 
 ### showCommonBottomPopup / showBottomTip（Phase 1）
@@ -30,7 +41,9 @@ showCommonBottomPopup({
   title: '提示',
   message: '你的企业已配置相关预订管控规则',
   buttonText: '知道了',
-  showClose: true
+  showClose: true,
+  // 单次调用覆盖动画时长（优先级高于全局配置）
+  animationDuration: 260
 }).then(() => console.log('closed'))
 ```
 
@@ -49,7 +62,8 @@ const action = await showModal({
   message: '确定要取消吗？',
   showCancelButton: true,
   cancelText: '再想想',
-  confirmText: '确认取消'
+  confirmText: '确认取消',
+  animationDuration: '320ms'
 })
 
 // 多按钮
@@ -95,3 +109,20 @@ showModal({
 | componentProps | object | 组件 props |
 | buttons | array | 多按钮配置 |
 | beforeClose | (action) => boolean \| Promise<boolean> | 关闭前钩子 |
+| animationDuration | number \| string | 动画时长，支持 `ms`/`s` 格式；优先级：单次调用 > 全局配置 > Vant 主题变量 > 300ms |
+
+### configureModalUtils
+
+配置库级默认行为。
+
+```js
+import { configureModalUtils } from 'vue-modal-utils'
+
+configureModalUtils({
+  animationDuration: '0.3s',
+})
+```
+
+| 参数 | 类型 | 说明 |
+|------|------|------|
+| animationDuration | number \| string | 全局默认动画时长，支持 `ms`/`s` 格式 |
