@@ -32,11 +32,25 @@
 
 ### 2.4 npm 令牌（用于 GitHub Actions）
 
-1. 在 npm 网站：Profile → **Access Tokens** → **Generate New Token**。
-2. 选择 **Classic**，类型选 **Automation**（适合 CI 发布）。
-3. 复制生成的 token，在 GitHub 仓库中：
+npm 要求**发布包**时满足其一：账号开启**两步验证（2FA）**，或使用** Granular Access Token 并勾选「Bypass 2FA」**。Classic Token 已逐步废弃，CI 发布请按下面方式配置。
+
+**方式一：Granular Access Token（推荐用于 CI）**
+
+1. 登录 [npm](https://www.npmjs.com/) → 头像 → **Access Tokens** → **Generate New Token** → 选择 **Granular access token**。
+2. 填写名称（如 `github-actions-publish`），**Expiration** 可选 90 天内。
+3. **Permissions** 选 **Packages and scopes** → 选 **Read and write**，并限定到要发布的包（如 `vue-modal-utils` 或所在 org）。
+4. **重要**：勾选 **Bypass Two-Factor Authentication**（必须在创建时勾选，创建后无法补开）。
+5. 生成后复制 token，在 GitHub 仓库：
    - **Settings** → **Secrets and variables** → **Actions**
-   - 新增 Secret：名称 `NPM_TOKEN`，值粘贴 token。
+   - 新增 Secret：名称 `NPM_TOKEN`，值粘贴该 token。
+
+**方式二：账号开启 2FA + Automation Classic Token**
+
+若坚持使用 Classic Token，需先在 npm 账号设置中开启 **Two-factor authentication**，再创建 **Automation** 类型 Classic Token，并在 GitHub Actions 的 Secret 里使用该 token 作为 `NPM_TOKEN`。
+
+**发布时报 403（Two-factor authentication or granular access token...）**
+
+- 说明当前 token 不符合上述要求。请按方式一新建 **Granular access token** 并勾选 **Bypass 2FA**，用新 token 更新仓库的 `NPM_TOKEN` Secret 后重跑发布。
 
 ## 三、GitHub Actions 工作流
 
