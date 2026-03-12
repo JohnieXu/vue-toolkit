@@ -31,5 +31,9 @@
     "dev": "vite build --watch"
   },
   "keywords": ["vue", "vue3", "modal", "vant", "command", "imperative"],
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JohnieXu/vue-toolkit"
+  }
 }
