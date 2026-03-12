@@ -40,10 +40,6 @@ importers:
         version: 1.6.4(@algolia/client-search@5.49.1)(postcss@8.5.8)(sass@1.97.3)(search-insights@2.17.3)
 
   packages/vue-modal-utils:
-    dependencies:
-      vue-shared-utils:
-        specifier: workspace:*
-        version: link:../vue-shared-utils
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^5.2.4
@@ -63,6 +59,9 @@ importers:
       vue:
         specifier: ^3.5.13
         version: 3.5.29
+      vue-shared-utils:
+        specifier: workspace:*
+        version: link:../vue-shared-utils
 
   packages/vue-shared-utils:
     devDependencies:
