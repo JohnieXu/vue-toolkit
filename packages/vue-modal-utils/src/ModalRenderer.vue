@@ -15,6 +15,8 @@
     content: { type: [Function, Object], default: null },
     component: { type: [Object, Function], default: null },
     componentProps: { type: Object, default: () => ({}) },
+    modalComponent: { type: [Object, Function], default: null },
+    modalComponentProps: { type: Object, default: () => ({}) },
     buttons: { type: Array, default: null },
   })
 
@@ -47,6 +49,15 @@
     if (typeof btn.onClick === 'function') btn.onClick()
   }
   const onCloseIconClick = () => emit('action', 'close')
+  const onShowUpdate = (v) => {
+    internalShow.value = v
+    emit('update:show', v)
+    if (!v) emit('action', 'close')
+  }
+  const onCustomAction = (action, payload) => emit('action', action, payload)
+  const onCustomConfirm = (payload) => emit('action', 'confirm', payload)
+  const onCustomCancel = (payload) => emit('action', 'cancel', payload)
+  const onCustomClose = (payload) => emit('action', 'close', payload)
 
   const renderContent = () => {
     if (props.component) return h(props.component, props.componentProps)
@@ -60,15 +71,47 @@
       return () => renderContent()
     },
   })
+
+  const customModalProps = computed(() => ({
+    ...props.modalComponentProps,
+    show: internalShow.value,
+    position: props.position,
+    title: props.title,
+    message: props.message,
+    confirmText: props.confirmText,
+    cancelText: props.cancelText,
+    showCancelButton: props.showCancelButton,
+    showClose: props.showClose,
+    content: props.content,
+    component: props.component,
+    componentProps: props.componentProps,
+    buttons: props.buttons,
+    requestAction: onCustomAction,
+    requestConfirm: onCustomConfirm,
+    requestCancel: onCustomCancel,
+    requestClose: onCustomClose,
+  }))
 </script>
 
 <template>
+  <component
+    v-if="modalComponent"
+    :is="modalComponent"
+    v-bind="customModalProps"
+    @update:show="onShowUpdate"
+    @action="onCustomAction"
+    @confirm="onCustomConfirm"
+    @cancel="onCustomCancel"
+    @close="onCustomClose"
+  />
   <van-popup
+    v-else
     v-model:show="internalShow"
     :position="position"
     :round="position === 'bottom'"
     class="modal-renderer-popup"
     :close-on-click-overlay="false"
+    @update:show="onShowUpdate"
     @click-overlay="onOverlayClick"
   >
     <div class="modal-renderer-content">

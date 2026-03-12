@@ -18,6 +18,11 @@
       title: 'Phase 3: showModal 全量',
       desc: '多按钮、content、beforeClose',
     },
+    {
+      path: '/vue-modal-utils/phase4',
+      title: 'Phase 4: showModal modalComponent',
+      desc: '完全自定义整弹窗，CustomFullModal 示例',
+    },
   ]
 </script>
 

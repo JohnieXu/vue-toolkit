@@ -133,10 +133,12 @@ export const showBottomTip = showCommonBottomPopup
  * @param {Function|Object} [options.content] - 渲染函数 () => VNode
  * @param {Object|Function} [options.component] - 业务组件
  * @param {Object} [options.componentProps] - 组件 props
+ * @param {Object|Function} [options.modalComponent] - 完全自定义弹窗组件
+ * @param {Object} [options.modalComponentProps] - 完全自定义弹窗组件 props
  * @param {Array} [options.buttons] - [{ text, type?, key? }]
  * @param {Function} [options.onOpen]
  * @param {Function} [options.onClose]
- * @param {Function} [options.beforeClose] - async, 返回 false 可阻止关闭
+ * @param {Function} [options.beforeClose] - async, 返回 false 可阻止关闭；签名 (action, payload)
  * @param {number|string} [options.animationDuration] - 单次调用动画时长，支持数字（ms）或 "0.3s"/"300ms"
  * @returns {Promise<'confirm'|'cancel'|'overlay'|'close'|string>}
  */
@@ -155,10 +157,11 @@ export function showModal(options = {}) {
       closeRef.fn?.(action)
     }
 
-    const handleAction = async (action) => {
+    const handleAction = async (action, payload) => {
+      if (resolved) return
       if (typeof options.beforeClose === 'function') {
         try {
-          const result = await options.beforeClose(action)
+          const result = await options.beforeClose(action, payload)
           if (result === false) return
         } catch (e) {
           reject(e)
@@ -190,6 +193,8 @@ export function showModal(options = {}) {
               content: options.content ?? null,
               component: options.component ?? null,
               componentProps: options.componentProps ?? {},
+              modalComponent: options.modalComponent ?? null,
+              modalComponentProps: options.modalComponentProps ?? {},
               buttons: options.buttons ?? null,
             })
         },

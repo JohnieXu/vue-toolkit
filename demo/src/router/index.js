@@ -31,6 +31,12 @@ const routes = [
     component: () => import('../views/vue-modal-utils/Phase3.vue'),
     meta: { title: 'showModal 全量' },
   },
+  {
+    path: '/vue-modal-utils/phase4',
+    name: 'vue-modal-utils-phase4',
+    component: () => import('../views/vue-modal-utils/Phase4.vue'),
+    meta: { title: 'showModal modalComponent' },
+  },
 ]
 
 export const router = createRouter({

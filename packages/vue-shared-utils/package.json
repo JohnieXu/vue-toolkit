@@ -1,6 +1,7 @@
 {
   "name": "vue-shared-utils",
   "version": "0.1.0",
+  "private": true,
   "type": "module",
   "description": "Vue 3 共享工具方法，供 vue-toolkit 各子包复用",
   "main": "dist/vue-shared-utils.umd.cjs",
