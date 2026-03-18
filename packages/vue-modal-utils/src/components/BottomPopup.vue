@@ -1,14 +1,24 @@
-<script setup>
+<script setup lang="ts">
   /* 单按钮底部弹窗组件（供 showCommonBottomPopup 使用） */
-  const props = defineProps({
-    show: { type: Boolean, default: false },
-    title: { type: String, default: '提示' },
-    message: { type: String, required: true },
-    buttonText: { type: String, default: '知道了' },
-    showClose: { type: Boolean, default: true },
+  interface BottomPopupProps {
+    show?: boolean
+    title?: string
+    message: string
+    buttonText?: string
+    showClose?: boolean
+  }
+
+  const props = withDefaults(defineProps<BottomPopupProps>(), {
+    show: false,
+    title: '提示',
+    buttonText: '知道了',
+    showClose: true,
   })
 
-  const emit = defineEmits(['update:show', 'confirm'])
+  const emit = defineEmits<{
+    (e: 'update:show', value: boolean): void
+    (e: 'confirm'): void
+  }>()
 
   const close = () => {
     emit('update:show', false)

@@ -82,4 +82,5 @@ pnpm install
 ## 文档
 
 - 详细设计：[docs/](docs/)
+- 注释规范：[docs/TSDOC-STYLE-GUIDE.md](docs/TSDOC-STYLE-GUIDE.md)
 - 在线文档：`pnpm docs:dev` 启动后访问本地预览

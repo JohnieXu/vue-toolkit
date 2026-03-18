@@ -5,6 +5,7 @@
   "description": "Vue 3 弹窗命令式调用 API，基于 Vant",
   "main": "dist/vue-modal-utils.umd.cjs",
   "module": "dist/vue-modal-utils.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/vue-modal-utils.mjs",
@@ -12,25 +13,35 @@
     },
     "./style": "./dist/vue-modal-utils.css"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "peerDependencies": {
-    "vue": "^3.5.0",
-    "vant": "^4.9.0"
+    "vant": "^4.9.0",
+    "vue": "^3.5.0"
   },
   "devDependencies": {
-    "vue-shared-utils": "workspace:*",
     "@vitejs/plugin-vue": "^5.2.4",
     "sass": "^1.42.1",
+    "typescript": "^5.9.3",
     "unplugin-vue-components": "^28.7.0",
     "vant": "^4.9.19",
     "vite": "^6.3.5",
-    "vue": "^3.5.13"
+    "vue": "^3.5.13",
+    "vue-shared-utils": "workspace:*"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && tsc -p tsconfig.json",
     "dev": "vite build --watch"
   },
-  "keywords": ["vue", "vue3", "modal", "vant", "command", "imperative"],
+  "keywords": [
+    "vue",
+    "vue3",
+    "modal",
+    "vant",
+    "command",
+    "imperative"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",

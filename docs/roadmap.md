@@ -16,6 +16,6 @@
 ## 长期规划
 
 - 多 UI 库适配（Element Plus、Naive UI 等）抽象层
-- TypeScript 支持
+- TypeScript 支持（先覆盖 packages 子包，docs-site/demo 暂不接入）
 - 国际化（i18n）支持
 - 在线文档与示例站完善（VitePress + MDX）

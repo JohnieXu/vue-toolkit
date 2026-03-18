@@ -13,7 +13,7 @@ export default defineConfig({
     }),
   ],
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.ts', '.js', '.vue', '.json'],
   },
   css: {
     preprocessorOptions: {
@@ -22,7 +22,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.js'),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'VueModalUtils',
       fileName: (format) => {
         if (format === 'es') return 'vue-modal-utils.mjs'

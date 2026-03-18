@@ -1,3 +1,45 @@
+name: CI
+
+on:
+  push:
+    paths:
+      - "vue-toolkit/**"
+      - ".github/workflows/**"
+  pull_request:
+    paths:
+      - "vue-toolkit/**"
+      - ".github/workflows/**"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: vue-toolkit
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: vue-toolkit/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build:packages
+
+      - name: Lint TSDoc
+        run: pnpm lint:tsdoc
 # 统一 CI：安装依赖、构建包与文档，用于 PR/推送检查
 name: CI
 

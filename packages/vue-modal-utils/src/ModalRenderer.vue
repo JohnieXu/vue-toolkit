@@ -1,26 +1,32 @@
-<script setup>
+<script setup lang="ts">
   /* 通用弹窗渲染组件，供 showModal 命令式调用使用 */
-  import { ref, computed, watch, defineComponent } from 'vue'
-  import { h } from 'vue'
+  import { ref, computed, watch, defineComponent, h } from 'vue'
+  import type { ModalAction, ModalButton, ModalRendererProps } from './types'
 
-  const props = defineProps({
-    show: { type: Boolean, default: true },
-    position: { type: String, default: 'bottom' },
-    title: { type: String, default: '提示' },
-    message: { type: String, default: '' },
-    confirmText: { type: String, default: '确认' },
-    cancelText: { type: String, default: '取消' },
-    showCancelButton: { type: Boolean, default: false },
-    showClose: { type: Boolean, default: true },
-    content: { type: [Function, Object], default: null },
-    component: { type: [Object, Function], default: null },
-    componentProps: { type: Object, default: () => ({}) },
-    modalComponent: { type: [Object, Function], default: null },
-    modalComponentProps: { type: Object, default: () => ({}) },
-    buttons: { type: Array, default: null },
+  const props = withDefaults(defineProps<ModalRendererProps>(), {
+    show: true,
+    position: 'bottom',
+    title: '提示',
+    message: '',
+    confirmText: '确认',
+    cancelText: '取消',
+    showCancelButton: false,
+    showClose: true,
+    content: null,
+    component: null,
+    componentProps: () => ({}),
+    modalComponent: null,
+    modalComponentProps: () => ({}),
+    buttons: null,
   })
 
-  const emit = defineEmits(['update:show', 'confirm', 'cancel', 'action', 'close'])
+  const emit = defineEmits<{
+    (e: 'update:show', value: boolean): void
+    (e: 'confirm'): void
+    (e: 'cancel'): void
+    (e: 'close'): void
+    (e: 'action', action: ModalAction, payload?: unknown): void
+  }>()
 
   const internalShow = ref(props.show)
 
@@ -31,7 +37,7 @@
     }
   )
 
-  const hasCustomContent = computed(() => props.content || props.component)
+  const hasCustomContent = computed(() => !!(props.content || props.component))
   const hasMultipleButtons = computed(() => Array.isArray(props.buttons) && props.buttons.length > 0)
 
   const onOverlayClick = () => emit('action', 'overlay')
@@ -43,21 +49,21 @@
     emit('cancel')
     emit('action', 'cancel')
   }
-  const onButtonClick = (btn, index) => {
+  const onButtonClick = (btn: ModalButton, index: number) => {
     const key = btn.key ?? String(index)
     emit('action', key)
     if (typeof btn.onClick === 'function') btn.onClick()
   }
   const onCloseIconClick = () => emit('action', 'close')
-  const onShowUpdate = (v) => {
+  const onShowUpdate = (v: boolean) => {
     internalShow.value = v
     emit('update:show', v)
     if (!v) emit('action', 'close')
   }
-  const onCustomAction = (action, payload) => emit('action', action, payload)
-  const onCustomConfirm = (payload) => emit('action', 'confirm', payload)
-  const onCustomCancel = (payload) => emit('action', 'cancel', payload)
-  const onCustomClose = (payload) => emit('action', 'close', payload)
+  const onCustomAction = (action: ModalAction, payload?: unknown) => emit('action', action, payload)
+  const onCustomConfirm = (payload?: unknown) => emit('action', 'confirm', payload)
+  const onCustomCancel = (payload?: unknown) => emit('action', 'cancel', payload)
+  const onCustomClose = (payload?: unknown) => emit('action', 'close', payload)
 
   const renderContent = () => {
     if (props.component) return h(props.component, props.componentProps)

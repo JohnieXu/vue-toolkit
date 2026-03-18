@@ -1,20 +1,27 @@
 /**
- * vue-modal-utils
- * 弹窗命令式调用 API：showCommonBottomPopup、showModal、showBottomTip
+ * `vue-modal-utils` 弹窗命令式 API 入口。
+ *
+ * @packageDocumentation
  */
 import { h, ref } from 'vue'
 import { mountComponent } from 'vue-shared-utils'
 import BottomPopup from './components/BottomPopup.vue'
 import ModalRenderer from './ModalRenderer.vue'
+import type {
+  ModalAction,
+  ModalGlobalConfig,
+  ShowCommonBottomPopupOptions,
+  ShowModalOptions,
+} from './types'
 
 const DEFAULT_ANIMATION_DURATION = 300
 const VANT_ANIMATION_DURATION_VARS = ['--van-duration-base', '--van-animation-duration-base']
 
-const modalConfig = {
+const modalConfig: ModalGlobalConfig = {
   animationDuration: undefined,
 }
 
-function parseAnimationDuration(value) {
+function parseAnimationDuration(value: unknown): number | null {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return Math.max(0, Math.round(value))
   }
@@ -34,7 +41,7 @@ function parseAnimationDuration(value) {
   return Number.isFinite(rawNumber) ? Math.max(0, Math.round(rawNumber)) : null
 }
 
-function readVantAnimationDurationFromCssVar() {
+function readVantAnimationDurationFromCssVar(): number | null {
   if (typeof window === 'undefined' || typeof document === 'undefined') return null
 
   const styles = window.getComputedStyle(document.documentElement)
@@ -47,7 +54,7 @@ function readVantAnimationDurationFromCssVar() {
   return null
 }
 
-function resolveAnimationDuration(options = {}) {
+function resolveAnimationDuration(options: { animationDuration?: number | string } = {}): number {
   const fromCall = parseAnimationDuration(options.animationDuration)
   if (fromCall !== null) return fromCall
 
@@ -61,11 +68,12 @@ function resolveAnimationDuration(options = {}) {
 }
 
 /**
- * 配置 vue-modal-utils 的全局行为
- * @param {Object} [config]
- * @param {number|string} [config.animationDuration] - 动画时长，支持数字（ms）或 "0.3s"/"300ms"
+ * 配置 `vue-modal-utils` 的全局行为。
+ *
+ * @param config - 全局配置。
+ * @public
  */
-export function configureModalUtils(config = {}) {
+export function configureModalUtils(config: ModalGlobalConfig = {}): void {
   if (!config || typeof config !== 'object') return
   if ('animationDuration' in config) {
     modalConfig.animationDuration = config.animationDuration
@@ -73,18 +81,15 @@ export function configureModalUtils(config = {}) {
 }
 
 /**
- * Phase 1: 单按钮底部弹窗
- * @param {Object} options
- * @param {string} [options.title='提示']
- * @param {string} options.message
- * @param {string} [options.buttonText='知道了']
- * @param {boolean} [options.showClose=true]
- * @param {number|string} [options.animationDuration] - 单次调用动画时长，支持数字（ms）或 "0.3s"/"300ms"
- * @returns {Promise<void>}
+ * 展示单按钮底部弹窗。
+ *
+ * @param options - 弹窗展示参数。
+ * @returns 用户关闭弹窗后的完成信号。
+ * @public
  */
-export function showCommonBottomPopup(options = {}) {
+export function showCommonBottomPopup(options: ShowCommonBottomPopupOptions = {}): Promise<void> {
   return new Promise((resolve) => {
-    const closeRef = { fn: null }
+    const closeRef: { fn: null | (() => void) } = { fn: null }
     const unmountDelay = resolveAnimationDuration(options)
 
     const { unmount } = mountComponent(
@@ -98,7 +103,7 @@ export function showCommonBottomPopup(options = {}) {
           return () =>
             h(BottomPopup, {
               show: show.value,
-              'onUpdate:show': (v) => {
+              'onUpdate:show': (v: boolean) => {
                 show.value = v
                 if (!v) closeRef.fn?.()
               },
@@ -117,39 +122,30 @@ export function showCommonBottomPopup(options = {}) {
   })
 }
 
-/** showCommonBottomPopup 的别名 */
+/**
+ * `showCommonBottomPopup` 的别名。
+ *
+ * @public
+ */
 export const showBottomTip = showCommonBottomPopup
 
 /**
- * Phase 2/3: 统一弹窗 API
- * @param {Object} options
- * @param {'bottom'|'center'|'top'} [options.position='bottom']
- * @param {string} [options.title='提示']
- * @param {string} [options.message]
- * @param {string} [options.confirmText='确认']
- * @param {string} [options.cancelText='取消']
- * @param {boolean} [options.showCancelButton=false]
- * @param {boolean} [options.showClose=true]
- * @param {Function|Object} [options.content] - 渲染函数 () => VNode
- * @param {Object|Function} [options.component] - 业务组件
- * @param {Object} [options.componentProps] - 组件 props
- * @param {Object|Function} [options.modalComponent] - 完全自定义弹窗组件
- * @param {Object} [options.modalComponentProps] - 完全自定义弹窗组件 props
- * @param {Array} [options.buttons] - [{ text, type?, key? }]
- * @param {Function} [options.onOpen]
- * @param {Function} [options.onClose]
- * @param {Function} [options.beforeClose] - async, 返回 false 可阻止关闭；签名 (action, payload)
- * @param {number|string} [options.animationDuration] - 单次调用动画时长，支持数字（ms）或 "0.3s"/"300ms"
- * @returns {Promise<'confirm'|'cancel'|'overlay'|'close'|string>}
+ * 展示统一弹窗（支持位置、按钮组、自定义内容与自定义组件）。
+ *
+ * @param options - 弹窗展示参数。
+ * @returns Promise resolve 为关闭动作类型。
+ * @remarks
+ * 若传入 `beforeClose` 且返回 `false`，将阻止当前关闭动作。
+ * @public
  */
-export function showModal(options = {}) {
+export function showModal(options: ShowModalOptions = {}): Promise<ModalAction> {
   return new Promise((resolve, reject) => {
-    const closeRef = { fn: null }
+    const closeRef: { fn: null | ((action: ModalAction) => void) } = { fn: null }
     const unmountDelay = resolveAnimationDuration(options)
 
     const show = ref(true)
     let resolved = false
-    const finish = (action) => {
+    const finish = (action: ModalAction) => {
       if (resolved) return
       resolved = true
       show.value = false
@@ -157,7 +153,7 @@ export function showModal(options = {}) {
       closeRef.fn?.(action)
     }
 
-    const handleAction = async (action, payload) => {
+    const handleAction = async (action: ModalAction, payload?: unknown) => {
       if (resolved) return
       if (typeof options.beforeClose === 'function') {
         try {
@@ -179,7 +175,7 @@ export function showModal(options = {}) {
           return () =>
             h(ModalRenderer, {
               show: show.value,
-              'onUpdate:show': (v) => {
+              'onUpdate:show': (v: boolean) => {
                 show.value = v
               },
               onAction: handleAction,
@@ -205,3 +201,5 @@ export function showModal(options = {}) {
     closeRef.fn = (action) => unmount(() => resolve(action))
   })
 }
+
+export type { ModalAction, ModalGlobalConfig, ShowCommonBottomPopupOptions, ShowModalOptions } from './types'

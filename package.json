@@ -6,12 +6,20 @@
   "description": "基于 Vue 3 的 UI 工具方法集合",
   "scripts": {
     "build": "pnpm -r run build",
+    "build:packages": "pnpm --filter ./packages/* run build",
     "demo": "pnpm --filter demo dev",
     "docs:dev": "pnpm --filter docs-site dev",
-    "docs:build": "pnpm --filter docs-site build"
+    "docs:build": "pnpm --filter docs-site build",
+    "lint:tsdoc": "eslint --config eslint.tsdoc.config.mjs \"packages/*/src/**/*.ts\" --max-warnings=0"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "pnpm@9.0.0"
+  "packageManager": "pnpm@9.0.0",
+  "devDependencies": {
+    "@typescript-eslint/parser": "^8.57.1",
+    "eslint": "^10.0.3",
+    "eslint-plugin-jsdoc": "^62.8.0",
+    "eslint-plugin-tsdoc": "^0.5.2"
+  }
 }

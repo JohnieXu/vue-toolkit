@@ -3,11 +3,11 @@ import { resolve } from 'path'
 
 export default defineConfig({
   resolve: {
-    extensions: ['.js', '.json'],
+    extensions: ['.ts', '.js', '.json'],
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.js'),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'VueSharedUtils',
       fileName: (format) => {
         if (format === 'es') return 'vue-shared-utils.mjs'
