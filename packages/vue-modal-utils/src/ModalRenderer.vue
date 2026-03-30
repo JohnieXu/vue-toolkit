@@ -114,7 +114,7 @@
     v-else
     v-model:show="internalShow"
     :position="position"
-    :round="position === 'bottom'"
+    :round="true"
     class="modal-renderer-popup"
     :close-on-click-overlay="false"
     @update:show="onShowUpdate"

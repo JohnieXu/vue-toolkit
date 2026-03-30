@@ -60,3 +60,9 @@ pnpm demo
 pnpm docs:dev
 pnpm docs:build
 ```
+
+## 本地接入业务项目
+
+若需要在 `trainResource-b2c` 等业务项目中联调本地 `vue-toolkit`（不走 npm 发布），请参考：
+
+- [本地接入业务项目（trainResource-b2c）](./local-integration.md)

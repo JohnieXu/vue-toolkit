@@ -7,6 +7,7 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '使用指南', link: '/guide/intro' },
+      { text: '本地接入', link: '/guide/local-integration' },
       { text: '子包', link: '/guide/packages' },
       { text: '规范', link: '/standards/code-style' },
     ],
@@ -16,6 +17,7 @@ export default defineConfig({
         items: [
           { text: '首页', link: '/' },
           { text: '使用指南', link: '/guide/intro' },
+          { text: '本地接入业务项目', link: '/guide/local-integration' },
           { text: '子包简介', link: '/guide/packages' },
         ],
       },

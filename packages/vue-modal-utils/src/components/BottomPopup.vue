@@ -30,7 +30,8 @@
 
 <template>
   <van-popup
-    v-model:show="props.show"
+    :show="props.show"
+    @update:show="emit('update:show', $event)"
     position="bottom"
     :round="true"
     class="validate-popup"
