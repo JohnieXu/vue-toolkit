@@ -79,8 +79,6 @@
   })
 
   const customModalProps = computed(() => ({
-    ...props.modalComponentProps,
-    show: internalShow.value,
     position: props.position,
     title: props.title,
     message: props.message,
@@ -92,6 +90,8 @@
     component: props.component,
     componentProps: props.componentProps,
     buttons: props.buttons,
+    ...props.modalComponentProps,
+    show: internalShow.value,
     requestAction: onCustomAction,
     requestConfirm: onCustomConfirm,
     requestCancel: onCustomCancel,
