@@ -90,7 +90,6 @@ const action = await showModal({
 | Prop | 说明 |
 |------|------|
 | `show` | 是否显示，可绑定到 `van-popup` 的 `v-model:show` |
-| `title` / `message` / `confirmText` / `cancelText` 等 | 与 showModal 选项一致，可按需使用 |
 | `requestConfirm(payload?)` | 触发「确认」并走 beforeClose → 关闭 → Promise resolve('confirm') |
 | `requestCancel(payload?)` | 触发「取消」并关闭，resolve('cancel') |
 | `requestClose(payload?)` | 触发关闭，resolve('close') |
