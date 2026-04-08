@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue'
-  import { showToast } from 'vant'
+  import { showToast } from '../../utils/debugToast'
   import { showModal } from 'vue-modal-utils'
   import CustomFullModal from './CustomFullModal.vue'
 

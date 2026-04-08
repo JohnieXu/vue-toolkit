@@ -53,6 +53,7 @@ demo / 业务应用
 | 方法 | 说明 |
 |------|------|
 | `mountComponent` | 将 Vue 组件挂载到 DOM，返回实例与卸载方法，支持动画延时卸载 |
+| `createNotifier` | 创建可复用的通知封装，支持统一日志开关与日志前缀 |
 
 详见 [设计文档](../../docs-site/docs/packages/vue-shared-utils/design.md)。
 
