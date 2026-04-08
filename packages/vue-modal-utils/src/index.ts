@@ -145,6 +145,7 @@ export function showModal(options: ShowModalOptions = {}): Promise<ModalAction> 
 
     const show = ref(true)
     let resolved = false
+    let handlingAction = false
     const finish = (action: ModalAction) => {
       if (resolved) return
       resolved = true
@@ -154,12 +155,17 @@ export function showModal(options: ShowModalOptions = {}): Promise<ModalAction> 
     }
 
     const handleAction = async (action: ModalAction, payload?: unknown) => {
-      if (resolved) return
+      if (resolved || handlingAction) return
+      handlingAction = true
       if (typeof options.beforeClose === 'function') {
         try {
           const result = await options.beforeClose(action, payload)
-          if (result === false) return
+          if (result === false) {
+            handlingAction = false
+            return
+          }
         } catch (e) {
+          handlingAction = false
           reject(e)
           return
         }

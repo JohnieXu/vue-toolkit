@@ -16,6 +16,12 @@
         confirmText: '提交',
         bizId: 'demo-001',
       },
+      onOpen: () => {
+        console.log('onOpen')
+      },
+      onClose: () => {
+        console.log('onClose')
+      },
       beforeClose: async (action, payload) => {
         console.log('beforeClose', action, payload)
         if (action === 'confirm' && payload?.form) {

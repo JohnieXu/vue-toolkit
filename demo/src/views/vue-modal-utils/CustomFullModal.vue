@@ -25,16 +25,12 @@
 
   const onConfirm = () => {
     const payload = { form: form.value }
-    emit('confirm', payload)
     props.requestConfirm?.(payload)
   }
   const onCancel = () => {
-    emit('cancel')
     props.requestCancel?.()
   }
   const onClose = () => {
-    emit('update:show', false)
-    emit('close')
     props.requestClose?.()
   }
 </script>
