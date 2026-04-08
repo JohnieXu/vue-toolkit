@@ -17,12 +17,14 @@
         bizId: 'demo-001',
       },
       beforeClose: async (action, payload) => {
+        console.log('beforeClose', action, payload)
         if (action === 'confirm' && payload?.form) {
           showToast(`提交内容: ${JSON.stringify(payload.form)}`)
         }
         return true
       },
     }).then((action) => {
+      console.log('then', action)
       lastAction.value = `modalComponent:${action}`
       showToast(`操作: ${action}`)
     })
