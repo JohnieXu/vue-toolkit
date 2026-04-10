@@ -20,6 +20,12 @@ const routes = [
     meta: { title: 'vue-hooks-utils' },
   },
   {
+    path: '/vue-hooks-utils/iframe-write',
+    name: 'vue-hooks-utils-iframe-write',
+    component: () => import('../views/vue-hooks-utils/IframeWrite.vue'),
+    meta: { title: 'useIframeDocumentWrite' },
+  },
+  {
     path: '/vue-modal-utils/phase1',
     name: 'vue-modal-utils-phase1',
     component: () => import('../views/vue-modal-utils/Phase1.vue'),

@@ -1,7 +1,9 @@
 <script setup>
   import { computed, ref } from 'vue'
+  import { useRouter } from 'vue-router'
   import { useEventListener, usePageActive, useScrollVisibility } from 'vue-hooks-utils'
 
+  const router = useRouter()
   const scrollContainerRef = ref(null)
   const keydownCount = ref(0)
 
@@ -33,6 +35,15 @@
     <h2 class="title">vue-hooks-utils</h2>
     <p class="desc">按键盘方向键 ↓ 可触发 useEventListener 计数。</p>
 
+    <van-cell-group inset class="nav-group">
+      <van-cell
+        title="Demo: useIframeDocumentWrite"
+        label="小程序 web-view + iframe 场景下使用 document.write 渲染 HTML"
+        is-link
+        @click="router.push('/vue-hooks-utils/iframe-write')"
+      />
+    </van-cell-group>
+
     <van-cell-group inset>
       <van-cell title="页面激活状态（usePageActive）" :value="isPageActive ? '激活中' : '未激活'" />
       <van-cell title="滚动方向（useScrollVisibility）" :value="directionLabel" />
@@ -61,6 +72,9 @@
     margin: 0 0 12px;
     font-size: 13px;
     color: #666;
+  }
+  .nav-group {
+    margin-bottom: 12px;
   }
   .scroll-box {
     margin-top: 12px;
