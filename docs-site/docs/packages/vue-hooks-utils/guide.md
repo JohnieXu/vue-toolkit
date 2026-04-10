@@ -75,16 +75,23 @@ const { iframeRef, writeIframeContent } = useIframeDocumentWrite(decodedHtml, {
   retryDelay: 60,
 })
 
+const tryWriteIframeContent = async () => {
+  const success = await writeIframeContent()
+  if (!success) {
+    console.warn('iframe 内容写入失败，请检查 iframe 是否已挂载。')
+  }
+}
+
 watch(visible, (value) => {
   if (!value) return
   nextTick(() => {
-    void writeIframeContent()
+    void tryWriteIframeContent()
   })
 })
 
 watch(decodedHtml, () => {
   nextTick(() => {
-    void writeIframeContent()
+    void tryWriteIframeContent()
   })
 })
 ```

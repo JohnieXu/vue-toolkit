@@ -5,6 +5,7 @@
  */
 import { createApp, type App, type Component, type ComponentPublicInstance } from 'vue'
 export * from './notifier'
+export * from './decodeHtmlEntities'
 
 /**
  * 挂载配置。
