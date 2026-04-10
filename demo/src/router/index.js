@@ -14,6 +14,12 @@ const routes = [
     meta: { title: 'vue-modal-utils' },
   },
   {
+    path: '/vue-hooks-utils',
+    name: 'vue-hooks-utils',
+    component: () => import('../views/vue-hooks-utils/Index.vue'),
+    meta: { title: 'vue-hooks-utils' },
+  },
+  {
     path: '/vue-modal-utils/phase1',
     name: 'vue-modal-utils-phase1',
     component: () => import('../views/vue-modal-utils/Phase1.vue'),

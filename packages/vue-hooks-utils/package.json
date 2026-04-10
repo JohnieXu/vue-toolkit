@@ -1,0 +1,38 @@
+{
+  "name": "vue-hooks-utils",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Vue 3 通用组合式 hooks 集合（仅依赖 vue）",
+  "main": "dist/vue-hooks-utils.umd.cjs",
+  "module": "dist/vue-hooks-utils.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-hooks-utils.mjs",
+      "require": "./dist/vue-hooks-utils.umd.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^6.3.5",
+    "vue": "^3.5.13"
+  },
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.json",
+    "dev": "vite build --watch"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "hooks",
+    "composables"
+  ],
+  "license": "MIT"
+}

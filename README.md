@@ -4,6 +4,8 @@
 
 ## 包含包
 
+- **vue-shared-utils**：Vue 3 共享工具（如 mountComponent）
+- **vue-hooks-utils**：仅依赖 Vue 的通用 hooks（usePageActive、useScrollVisibility、useEventListener）
 - **vue-modal-utils**：弹窗命令式调用 API（showCommonBottomPopup、showModal、showBottomTip）
 
 ## 技术栈
@@ -19,13 +21,13 @@ pnpm build
 
 ## 弹窗示例 Demo
 
-本地运行 vue-modal-utils 验证示例：
+本地运行示例（包含 vue-modal-utils、vue-hooks-utils）：
 
 ```bash
 pnpm demo
 ```
 
-启动后访问浏览器即可体验 showCommonBottomPopup、showModal、showBottomTip 等 API 的完整演示。
+启动后访问浏览器即可体验 hooks 与弹窗 API 的完整演示。
 
 ## 本地调试接入
 
@@ -38,6 +40,7 @@ pnpm demo
 ```json
 {
   "dependencies": {
+    "vue-hooks-utils": "file:./vue-toolkit/packages/vue-hooks-utils",
     "vue-modal-utils": "file:./vue-toolkit/packages/vue-modal-utils"
   }
 }
@@ -75,7 +78,7 @@ pnpm install
 
 ### 注意事项
 
-- 主项目需已安装 `vue` 和 `vant`，vue-modal-utils 以 peerDependencies 形式依赖
+- 主项目需已安装 `vue`（若使用 `vue-modal-utils` 还需安装 `vant`）
 - 首次接入或 `pnpm install` 后，若主项目报错找不到包，先确认 vue-toolkit 已执行 `pnpm build` 且 `dist/` 目录存在
 - 发布 npm 后，可将 `file:./vue-toolkit/...` 改为版本号（如 `^0.1.0`）使用线上包
 

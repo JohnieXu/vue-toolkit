@@ -32,6 +32,13 @@ export default defineConfig({
             ],
           },
           {
+            text: 'vue-hooks-utils',
+            items: [
+              { text: '使用指南', link: '/packages/vue-hooks-utils/guide' },
+              { text: '设计文档', link: '/packages/vue-hooks-utils/design' },
+            ],
+          },
+          {
             text: 'vue-modal-utils',
             items: [
               { text: '使用指南', link: '/packages/vue-modal-utils/guide' },

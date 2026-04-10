@@ -11,6 +11,7 @@
   "dependencies": {
     "@vueuse/core": "^14.2.1",
     "vant": "^4.9.19",
+    "vue-hooks-utils": "workspace:*",
     "vue": "^3.5.13",
     "vue-modal-utils": "workspace:*",
     "vue-shared-utils": "workspace:*",

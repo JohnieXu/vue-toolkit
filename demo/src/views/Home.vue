@@ -4,6 +4,11 @@
   const router = useRouter()
   const packages = [
     {
+      path: '/vue-hooks-utils',
+      name: 'vue-hooks-utils',
+      desc: '通用 hooks（usePageActive、useScrollVisibility、useEventListener）',
+    },
+    {
       path: '/vue-modal-utils',
       name: 'vue-modal-utils',
       desc: '弹窗命令式调用 API（showCommonBottomPopup、showModal、showBottomTip）',
