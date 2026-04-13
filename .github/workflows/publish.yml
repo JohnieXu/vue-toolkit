@@ -1,4 +1,4 @@
-# 发布到 npm：在创建 Release 或推送 v* tag 时构建并发布 vue-modal-utils
+# 发布到 npm：在创建 Release 或推送 v* tag 时构建并发布 vue-modal-utils 与 vue-hooks-utils
 # 需在仓库 Secrets 中配置 NPM_TOKEN（npm Automation Token）
 name: Publish to npm
 
@@ -48,6 +48,16 @@ jobs:
 
       - name: Sync version and publish vue-modal-utils
         working-directory: packages/vue-modal-utils
+        run: |
+          if [ -n "${{ steps.version.outputs.VERSION }}" ]; then
+            npm pkg set version="${{ steps.version.outputs.VERSION }}"
+          fi
+          npm publish --access public --provenance --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Sync version and publish vue-hooks-utils
+        working-directory: packages/vue-hooks-utils
         run: |
           if [ -n "${{ steps.version.outputs.VERSION }}" ]; then
             npm pkg set version="${{ steps.version.outputs.VERSION }}"
