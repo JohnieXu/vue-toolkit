@@ -2,10 +2,12 @@
   import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useEventListener, usePageActive, useScrollVisibility } from 'vue-hooks-utils'
+  import { useDemoTheme } from '../../useDemoTheme'
 
   const router = useRouter()
   const scrollContainerRef = ref(null)
   const keydownCount = ref(0)
+  const { isDarkTheme } = useDemoTheme()
 
   const { isPageActive } = usePageActive(true)
   const { isVisible, direction, scrollTop } = useScrollVisibility({
@@ -28,6 +30,7 @@
     if (direction.value === 'down') return '下滑'
     return '无'
   })
+
 </script>
 
 <template>
@@ -52,7 +55,7 @@
       <van-cell title="键盘 ↓ 次数（useEventListener）" :value="String(keydownCount)" />
     </van-cell-group>
 
-    <div ref="scrollContainerRef" class="scroll-box">
+    <div ref="scrollContainerRef" class="scroll-box" :class="{ 'scroll-box-dark': isDarkTheme }">
       <div v-for="item in 24" :key="item" class="scroll-item">滚动演示项 {{ item }}</div>
     </div>
   </div>
@@ -92,6 +95,16 @@
     color: #333;
     &:last-child {
       border-bottom: none;
+    }
+  }
+
+  .scroll-box-dark {
+    background: #1f1f1f;
+    border-color: #3a3a3a;
+
+    .scroll-item {
+      color: #f5f5f5;
+      border-bottom-color: #2e2e2e;
     }
   }
 </style>
