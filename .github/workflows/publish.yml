@@ -1,26 +1,29 @@
-# 发布到 npm：在创建 Release 或推送 v* tag 时构建并发布 vue-modal-utils 与 vue-hooks-utils
-# 需在仓库 Secrets 中配置 NPM_TOKEN（npm Automation Token）
-name: Publish to npm
+# 采用 Changesets 管理多包独立版本与发布
+# 需在仓库 Secrets 中配置 NPM_TOKEN
+name: Publish Packages
 
 on:
-  release:
-    types: [published]
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
+      - master
+  workflow_dispatch:
 
 jobs:
-  publish:
+  release:
+    name: Version or Publish
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
+      pull-requests: write
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        # 版本由根目录 package.json 的 packageManager 字段决定（pnpm@9.0.0）
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -36,32 +39,14 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Set version from tag or release
-        id: version
-        run: |
-          if [ "${{ github.event_name }}" = 'release' ]; then
-            VER="${{ github.event.release.tag_name }}"
-            echo "VERSION=${VER#v}" >> $GITHUB_OUTPUT
-          else
-            echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Sync version and publish vue-modal-utils
-        working-directory: packages/vue-modal-utils
-        run: |
-          if [ -n "${{ steps.version.outputs.VERSION }}" ]; then
-            npm pkg set version="${{ steps.version.outputs.VERSION }}"
-          fi
-          npm publish --access public --provenance --no-git-checks
+      - name: Create Release PR or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm version-packages
+          publish: pnpm release
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Sync version and publish vue-hooks-utils
-        working-directory: packages/vue-hooks-utils
-        run: |
-          if [ -n "${{ steps.version.outputs.VERSION }}" ]; then
-            npm pkg set version="${{ steps.version.outputs.VERSION }}"
-          fi
-          npm publish --access public --provenance --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
