@@ -26,6 +26,7 @@
 | `useScrollVisibility` | 监听滚动方向并输出显隐状态 |
 | `useEventListener` | 自动注册/清理事件监听，支持 Ref 目标 |
 | `useIframeDocumentWrite` | 在 `iframe[srcdoc]` 不稳定环境下改用 `document.write` 渲染 HTML |
+| `useViewportUnit` | 将运行时 px 动态样式值转换为 vw/vh/vmin/vmax |
 
 ## 使用示例
 
@@ -60,6 +61,25 @@ useEventListener(window, 'resize', () => {
   // do something
 })
 ```
+
+### useViewportUnit
+
+```ts
+import { useViewportUnit } from 'vue-hooks-utils'
+
+const { pxToVw, pxToViewportUnit } = useViewportUnit({
+  designSize: 375,
+  precision: 4,
+})
+
+const iconSize = pxToVw(12)
+const sheetHeight = pxToViewportUnit(240, {
+  designSize: 812,
+  unit: 'vh',
+})
+```
+
+模板里的动态绑定值不会经过 PostCSS 的 px-to-viewport 转换，可用 `useViewportUnit` 在运行时统一换算。字符串输入默认原样返回，便于调用方传入 `10px`、`10vw`、`clamp(...)` 等已经带单位的值。
 
 ### useIframeDocumentWrite
 

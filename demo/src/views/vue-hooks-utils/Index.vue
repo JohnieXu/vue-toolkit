@@ -1,7 +1,7 @@
 <script setup>
   import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { useEventListener, usePageActive, useScrollVisibility } from 'vue-hooks-utils'
+  import { useEventListener, usePageActive, useScrollVisibility, useViewportUnit } from 'vue-hooks-utils'
   import { useDemoTheme } from '../../useDemoTheme'
 
   const router = useRouter()
@@ -13,6 +13,10 @@
   const { isVisible, direction, scrollTop } = useScrollVisibility({
     target: scrollContainerRef,
     threshold: 8,
+  })
+  const { pxToVw } = useViewportUnit({
+    designSize: 375,
+    precision: 4,
   })
 
   useEventListener(
@@ -53,6 +57,7 @@
       <van-cell title="内容区显隐" :value="isVisible ? '显示' : '隐藏'" />
       <van-cell title="当前滚动值" :value="String(Math.round(scrollTop))" />
       <van-cell title="键盘 ↓ 次数（useEventListener）" :value="String(keydownCount)" />
+      <van-cell title="12px 转 vw（useViewportUnit）" :value="pxToVw(12)" />
     </van-cell-group>
 
     <div ref="scrollContainerRef" class="scroll-box" :class="{ 'scroll-box-dark': isDarkTheme }">

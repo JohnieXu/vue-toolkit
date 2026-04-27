@@ -8,7 +8,15 @@ export { usePageActive } from './usePageActive'
 export { useEventListener } from './useEventListener'
 export { useScrollVisibility } from './useScrollVisibility'
 export { useIframeDocumentWrite } from './useIframeDocumentWrite'
+export { pxToViewportUnit, useViewportUnit } from './useViewportUnit'
 
 export type { EventTargetLike, MaybeElementRef } from './useEventListener'
 export type { ScrollDirection, UseScrollVisibilityOptions } from './useScrollVisibility'
 export type { UseIframeDocumentWriteOptions, UseIframeDocumentWriteResult } from './useIframeDocumentWrite'
+export type {
+  PxToViewportUnitOptions,
+  UseViewportUnitOptions,
+  UseViewportUnitResult,
+  ViewportUnit,
+  ViewportUnitPxValue,
+} from './useViewportUnit'

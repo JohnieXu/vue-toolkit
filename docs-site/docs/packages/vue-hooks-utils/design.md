@@ -40,6 +40,13 @@
 - Hook 仅负责渲染链路，不负责 XSS 过滤。
 - 若内容源不可信，调用方必须在传入前完成安全过滤。
 
+### useViewportUnit
+
+- 面向模板动态绑定样式值不会经过 PostCSS px-to-viewport 转换的场景。
+- 默认按 `375` 设计尺寸将 px 转为 `vw`，也支持通过 `designSize`、`unit`、`precision`、`fallbackValue` 覆盖。
+- 字符串输入默认原样返回，便于业务侧混用已有单位值或 CSS 函数。
+- 同时导出纯函数 `pxToViewportUnit`，便于在非组件上下文中复用同一套换算规则。
+
 ## 迁移准入规则
 
 以下规则用于判断业务侧 hook 是否可迁移到 `vue-hooks-utils`：
