@@ -14,7 +14,7 @@
     "test": "pnpm test:unit -- --run && pnpm test:e2e",
     "test:unit": "vitest",
     "test:unit:watch": "vitest --watch",
-    "test:e2e": "playwright test",
+    "test:e2e": "pnpm build:packages && playwright test",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish --access public --provenance"

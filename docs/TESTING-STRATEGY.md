@@ -37,7 +37,9 @@ E2E 测试使用 `@playwright/test`，配置文件为 `playwright.config.ts`。
 
 - `testDir: './e2e'`：E2E 用例集中在根目录 `e2e` 下。
 - `baseURL: 'http://127.0.0.1:5173'`：指向 demo Vite dev server。
-- `webServer.command: 'pnpm build:packages && pnpm --filter demo dev --host 127.0.0.1'`：先构建 packages，再启动 demo，模拟 demo 消费包产物的真实方式。
+- `test:e2e` 会先执行 `pnpm build:packages`，确保 `vue-modal-utils/style` 指向的 CSS 构建产物存在。
+- `webServer.command: 'pnpm --filter demo dev --host 127.0.0.1'`：Playwright 只负责启动 demo dev server。
+- `demo/vite.config.js` 显式 alias 到 workspace 源码和 `vue-modal-utils` 的构建样式，避免 CI 中 Vite 对 workspace package CSS subpath 的解析差异。
 - 首版仅启用 `chromium`：降低 CI 时间和不稳定因素；后续可按需要扩展到 WebKit / Firefox。
 
 ## 三、单元测试覆盖边界
