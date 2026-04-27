@@ -31,3 +31,12 @@ jobs:
 
       - name: Lint TSDoc
         run: pnpm lint:tsdoc
+
+      - name: Run unit tests
+        run: pnpm test:unit -- --run
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: pnpm test:e2e

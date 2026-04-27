@@ -5,6 +5,7 @@
  */
 import { h, ref } from 'vue'
 import { mountComponent } from 'vue-shared-utils'
+import { resolveAnimationDuration } from './animationDuration'
 import BottomPopup from './components/BottomPopup.vue'
 import ModalRenderer from './ModalRenderer.vue'
 import type {
@@ -14,57 +15,8 @@ import type {
   ShowModalOptions,
 } from './types'
 
-const DEFAULT_ANIMATION_DURATION = 300
-const VANT_ANIMATION_DURATION_VARS = ['--van-duration-base', '--van-animation-duration-base']
-
 const modalConfig: ModalGlobalConfig = {
   animationDuration: undefined,
-}
-
-function parseAnimationDuration(value: unknown): number | null {
-  if (typeof value === 'number' && Number.isFinite(value)) {
-    return Math.max(0, Math.round(value))
-  }
-
-  if (typeof value !== 'string') return null
-
-  const normalized = value.trim().split(',')[0]?.trim()
-  if (!normalized) return null
-
-  const msMatch = normalized.match(/^(-?\d+(?:\.\d+)?)ms$/i)
-  if (msMatch) return Math.max(0, Math.round(Number(msMatch[1])))
-
-  const sMatch = normalized.match(/^(-?\d+(?:\.\d+)?)s$/i)
-  if (sMatch) return Math.max(0, Math.round(Number(sMatch[1]) * 1000))
-
-  const rawNumber = Number(normalized)
-  return Number.isFinite(rawNumber) ? Math.max(0, Math.round(rawNumber)) : null
-}
-
-function readVantAnimationDurationFromCssVar(): number | null {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return null
-
-  const styles = window.getComputedStyle(document.documentElement)
-  for (const cssVarName of VANT_ANIMATION_DURATION_VARS) {
-    const cssVarValue = styles.getPropertyValue(cssVarName)
-    const parsed = parseAnimationDuration(cssVarValue)
-    if (parsed !== null) return parsed
-  }
-
-  return null
-}
-
-function resolveAnimationDuration(options: { animationDuration?: number | string } = {}): number {
-  const fromCall = parseAnimationDuration(options.animationDuration)
-  if (fromCall !== null) return fromCall
-
-  const fromGlobalConfig = parseAnimationDuration(modalConfig.animationDuration)
-  if (fromGlobalConfig !== null) return fromGlobalConfig
-
-  const fromVantCssVar = readVantAnimationDurationFromCssVar()
-  if (fromVantCssVar !== null) return fromVantCssVar
-
-  return DEFAULT_ANIMATION_DURATION
 }
 
 /**
@@ -90,7 +42,7 @@ export function configureModalUtils(config: ModalGlobalConfig = {}): void {
 export function showCommonBottomPopup(options: ShowCommonBottomPopupOptions = {}): Promise<void> {
   return new Promise((resolve) => {
     const closeRef: { fn: null | (() => void) } = { fn: null }
-    const unmountDelay = resolveAnimationDuration(options)
+    const unmountDelay = resolveAnimationDuration(options, modalConfig)
 
     const { unmount } = mountComponent(
       {
@@ -141,7 +93,7 @@ export const showBottomTip = showCommonBottomPopup
 export function showModal(options: ShowModalOptions = {}): Promise<ModalAction> {
   return new Promise((resolve, reject) => {
     const closeRef: { fn: null | ((action: ModalAction) => void) } = { fn: null }
-    const unmountDelay = resolveAnimationDuration(options)
+    const unmountDelay = resolveAnimationDuration(options, modalConfig)
 
     const show = ref(true)
     let resolved = false

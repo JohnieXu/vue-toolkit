@@ -5,6 +5,8 @@ node_modules/
 dist/
 docs-site/docs/.vitepress/dist/
 docs-site/docs/.vitepress/cache/
+playwright-report/
+test-results/
 
 # Logs
 logs

@@ -5,7 +5,7 @@ import tsdoc from 'eslint-plugin-tsdoc'
 export default [
   {
     files: ['packages/*/src/**/*.ts'],
-    ignores: ['**/*.d.ts'],
+    ignores: ['**/*.d.ts', '**/*.test.ts', '**/*.spec.ts'],
     languageOptions: {
       parser: tsParser,
       ecmaVersion: 'latest',
