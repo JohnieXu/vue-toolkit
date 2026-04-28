@@ -1,6 +1,6 @@
 {
   "name": "vue-hooks-utils",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Vue 3 通用组合式 hooks 集合（仅依赖 vue）",
   "main": "dist/vue-hooks-utils.umd.cjs",
