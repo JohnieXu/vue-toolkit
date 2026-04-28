@@ -47,6 +47,28 @@
 - 字符串输入默认原样返回，便于业务侧混用已有单位值或 CSS 函数。
 - 同时导出纯函数 `pxToViewportUnit`，便于在非组件上下文中复用同一套换算规则。
 
+### useAutoScrollOnFocus
+
+- 面向移动端 H5 表单聚焦后被软键盘或底部 fixed 区域遮挡的场景。
+- iOS 下会寻找最近的可滚动父容器并滚动到输入框附近，非 iOS 环境使用 `scrollIntoView` 兜底。
+- 通过 `fixedSelector` / `bottomOffset` 让调用方声明底部避让距离，不感知业务按钮或具体页面结构。
+- 不注册组件、不修改业务 DOM 样式，只负责“输入聚焦后尽量滚动可见”这一行为。
+
+### useSoftKeyboardVisibility
+
+- 基于 `visualViewport` 优先估算软键盘高度；不可用时退回到 `window.innerHeight` 的高度差判断。
+- 返回 `isKeyboardVisible`、`keyboardHeight`、`viewportHeight`、`baselineHeight`，由业务自行决定底部栏显隐。
+- 不接受 className，也不直接设置 `display`，避免把具体页面元素耦合进工具包。
+- `focusin` / `focusout` 只作为延迟刷新状态的辅助信号，最终状态仍以视口高度变化为准。
+
+## 未提取候选记录
+
+- `useLongPress`：VueUse 已提供 `onLongPress`，连续触发可组合 `useIntervalFn` 或在业务侧保留薄封装。
+- `useExposureTracking`：底层能力由 VueUse `useIntersectionObserver` 覆盖；现有批量追踪、`data-exposureId`、滚动停止后上报更偏埋点策略，不放入仅依赖 Vue 的通用 hooks 包。
+- `useTrainInfoCardBgCoverHeight`：核心能力由 VueUse `useElementSize` / `useResizeObserver` 覆盖，不重复封装尺寸监听。
+- `useSortBarScroll`：已有 `useScrollVisibility` 可表达滚动方向驱动显隐，不新增同义 API。
+- `usePageActive`、`useViewportUnit`：已在本包中提供，不重复迁移。
+
 ## 迁移准入规则
 
 以下规则用于判断业务侧 hook 是否可迁移到 `vue-hooks-utils`：

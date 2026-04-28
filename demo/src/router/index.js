@@ -26,6 +26,12 @@ const routes = [
     meta: { title: 'useIframeDocumentWrite' },
   },
   {
+    path: '/vue-hooks-utils/mobile-input',
+    name: 'vue-hooks-utils-mobile-input',
+    component: () => import('../views/vue-hooks-utils/MobileInput.vue'),
+    meta: { title: '移动端输入 Hooks' },
+  },
+  {
     path: '/vue-modal-utils/phase1',
     name: 'vue-modal-utils-phase1',
     component: () => import('../views/vue-modal-utils/Phase1.vue'),

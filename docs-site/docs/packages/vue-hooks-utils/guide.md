@@ -27,6 +27,8 @@
 | `useEventListener` | 自动注册/清理事件监听，支持 Ref 目标 |
 | `useIframeDocumentWrite` | 在 `iframe[srcdoc]` 不稳定环境下改用 `document.write` 渲染 HTML |
 | `useViewportUnit` | 将运行时 px 动态样式值转换为 vw/vh/vmin/vmax |
+| `useAutoScrollOnFocus` | 输入框聚焦时自动滚动到可视区域 |
+| `useSoftKeyboardVisibility` | 监听移动端软键盘可见状态与估算高度 |
 
 ## 使用示例
 
@@ -80,6 +82,34 @@ const sheetHeight = pxToViewportUnit(240, {
 ```
 
 模板里的动态绑定值不会经过 PostCSS 的 px-to-viewport 转换，可用 `useViewportUnit` 在运行时统一换算。字符串输入默认原样返回，便于调用方传入 `10px`、`10vw`、`clamp(...)` 等已经带单位的值。
+
+### useAutoScrollOnFocus
+
+```ts
+import { useAutoScrollOnFocus } from 'vue-hooks-utils'
+
+useAutoScrollOnFocus({
+  fixedSelector: '.bottom-action-bar',
+  bottomOffset: 12,
+})
+```
+
+移动端表单页可在组件 `setup` 中调用。Hook 会监听 `focusin`，当 `input` / `textarea` 被软键盘遮挡时触发滚动；iOS 下会优先寻找最近的可滚动父容器，非 iOS 环境使用 `scrollIntoView` 兜底。
+
+### useSoftKeyboardVisibility
+
+```ts
+import { useSoftKeyboardVisibility } from 'vue-hooks-utils'
+
+const { isKeyboardVisible, keyboardHeight } = useSoftKeyboardVisibility({
+  threshold: 100,
+  onChange(state) {
+    console.log(state.isKeyboardVisible, state.keyboardHeight)
+  },
+})
+```
+
+Hook 仅输出软键盘状态，不直接修改业务元素样式。页面可以根据 `isKeyboardVisible` 决定是否隐藏底部按钮、排序栏或浮层操作区。
 
 ### useIframeDocumentWrite
 
