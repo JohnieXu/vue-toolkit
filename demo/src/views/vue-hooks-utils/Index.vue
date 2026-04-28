@@ -44,6 +44,12 @@
 
     <van-cell-group inset class="nav-group">
       <van-cell
+        title="Demo: 移动端输入 Hooks"
+        label="输入聚焦自动滚动 + 软键盘状态监听"
+        is-link
+        @click="router.push('/vue-hooks-utils/mobile-input')"
+      />
+      <van-cell
         title="Demo: useIframeDocumentWrite"
         label="小程序 web-view + iframe 场景下使用 document.write 渲染 HTML"
         is-link
