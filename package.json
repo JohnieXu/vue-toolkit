@@ -18,7 +18,7 @@
     "test:e2e:ui": "pnpm build:packages && playwright test --ui",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish --access public --provenance"
+    "release": "pnpm build:packages && changeset publish --access public --provenance"
   },
   "engines": {
     "node": ">=18"
