@@ -12,9 +12,10 @@
     "docs:build": "pnpm --filter docs-site build",
     "lint:tsdoc": "eslint --config eslint.tsdoc.config.mjs \"packages/*/src/**/*.ts\" --max-warnings=0",
     "test": "pnpm test:unit -- --run && pnpm test:e2e",
-    "test:unit": "vitest",
-    "test:unit:watch": "vitest --watch",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest watch",
     "test:e2e": "pnpm build:packages && playwright test",
+    "test:e2e:ui": "pnpm build:packages && playwright test --ui",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "changeset publish --access public --provenance"

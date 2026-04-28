@@ -3,7 +3,8 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './e2e',
   timeout: 30_000,
-  fullyParallel: true,
+  fullyParallel: !process.env.CI,
+  workers: process.env.CI ? 1 : undefined,
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? [['html'], ['github']] : 'list',
   use: {
@@ -11,7 +12,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'pnpm --filter demo dev --host 127.0.0.1',
+    command: 'pnpm --filter demo build && pnpm --filter demo preview --host 127.0.0.1 --port 5173',
     url: 'http://127.0.0.1:5173',
     reuseExistingServer: !process.env.CI,
   },
