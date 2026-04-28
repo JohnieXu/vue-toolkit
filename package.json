@@ -8,6 +8,7 @@
     "build": "pnpm -r run build",
     "build:packages": "pnpm --filter \"./packages/*\" run build",
     "demo": "pnpm --filter demo dev",
+    "demo:build": "pnpm --filter demo build",
     "docs:dev": "pnpm --filter docs-site dev",
     "docs:build": "pnpm --filter docs-site build",
     "lint:tsdoc": "eslint --config eslint.tsdoc.config.mjs \"packages/*/src/**/*.ts\" --max-warnings=0",
