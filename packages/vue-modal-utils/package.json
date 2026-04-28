@@ -16,6 +16,10 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "peerDependencies": {
     "vant": "^4.9.0",
     "vue": "^3.5.0"
